@@ -121,7 +121,7 @@ object NeoServer {
    * Execute instructions within a Neo4j transaction; rollback if exception is raised and
    * commit otherwise; and return the return value from the operation.
    */
-  def exec[T<:AnyRef](operation: NeoService => T): T = {
+  def exec[T<:Any](operation: NeoService => T): T = {
     val tx = synchronized {
       if (neo == null) startup
       neo.beginTx
