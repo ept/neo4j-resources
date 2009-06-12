@@ -2,16 +2,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <packaging>war</packaging>
+  <packaging>jar</packaging>
 
-  <!--
-   * This is a template for new Scala projects which use the Neo4j graph database
-   * and expose a domain-specific REST API. Please edit the following few lines to
-   * match your project details.
-    -->
-  <groupId>com.example</groupId>
-  <artifactId>neo4j-scala-template</artifactId>
-  <name>neo4j-scala-template</name>
+  <groupId>com.eptcomputing</groupId>
+  <artifactId>neo4j-resources</artifactId>
+  <name>neo4j-resources</name>
   <version>1.0-SNAPSHOT</version>
 
   <dependencies>
@@ -135,20 +130,6 @@
         </executions>
       </plugin>
 
-      <!-- Run the application using "mvn jetty:run" -->
-      <plugin>
-        <groupId>org.mortbay.jetty</groupId>
-        <artifactId>maven-jetty-plugin</artifactId>
-        <configuration>
-          <contextPath>/</contextPath>
-          <connectors>
-            <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-              <port>8080</port>
-            </connector>
-          </connectors>
-        </configuration>
-      </plugin>
-
       <!-- Configure which tests should be run as part of a build -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -161,7 +142,7 @@
             <include>**/*TestCase.class</include>
             <include>**/*Spec.class</include>
           </includes>
-          <argLine>-Djava.endorsed.dirs=${settings.localRepository}/javax/xml/bind/jaxb-api/2.1 -Dneo4j.config=src/main/webapp/WEB-INF/neo4j.properties -Dneo4j.env=test</argLine>
+          <argLine>-Djava.endorsed.dirs=${settings.localRepository}/javax/xml/bind/jaxb-api/2.1 -Dneo4j.config=src/test/resources/neo4j.properties -Dneo4j.env=test</argLine>
         </configuration>
       </plugin>
     </plugins>
