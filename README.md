@@ -1,25 +1,19 @@
-Neo4j/Scala/Jersey project template
-===================================
+Neo4j resources library
+=======================
 
-* You want to develop an application using the [Neo4j](http://neo4j.org)
-  open source graph database?
-* You want to write your code in beautiful [Scala](http://www.scala-lang.org)?
-* You want to expose your database through a nice clean JSON REST API,
-  implemented with [Jersey/JSR311]()?
-* You want to get up and running quickly?
+The Neo4j resources library allows you to build an application which stores its data in
+the [http://neo4j.org/](Neo4j open source graph database) and exposes it through a
+domain-specific RESTful JSON API which you define. It is written in Scala and is intended
+to be used in other Scala projects, although you may be able to get it to work with
+other JVM-based langauges too. Projects using this library can build amazing databases
+with a minimum of boilerplate and unnecessary code.
 
-Then you've come to the right place. This repository contains a rough outline
-for a new project, including a Maven descriptor `pom.xml` detailing all the
-dependencies, an Eclipse project with all the right build settings, and
-examples of how to write tests. You'll be up and running in no time.
+Please see the [Neo4j Scala template](http://github.com/ept/neo4j-scala-template/tree/master)
+as a starting point for your application based on the Neo4j resources library.
 
 
-Building this template
-----------------------
-
-Start by building and running this project; it contains some examples which
-you can start playing with, and then expand to match your own needs once you
-are comfortable with them.
+Building
+--------
 
 You need a Java 5 (or newer) environment and Maven 2.0.9 (or newer) installed:
 
@@ -29,36 +23,36 @@ You need a Java 5 (or newer) environment and Maven 2.0.9 (or newer) installed:
     OS name: "darwin" version: "9.7.0" arch: "i386" Family: "unix"
 
 Install the [JUnit4 Runner for ScalaTest](http://github.com/teigen/scalatest-junit4runner/tree/master)
-as described in its [README file](http://github.com/teigen/scalatest-junit4runner/blob/master/README.textile).
+as follows:
 
-Download this repository, or clone it with `git`, or merge it into your own
-git repository, by running one of the following:
+    $ git clone git://github.com/teigen/scalatest-junit4runner.git
+    $ cd scalatest-junit4runner
+    $ mvn clean install
 
-* Download [ZIP file](http://github.com/ept/neo4j-scala-template/zipball/master) or
-  [tarball](http://github.com/ept/neo4j-scala-template/tarball/master)
-* `git clone git://github.com/ept/neo4j-scala-template.git` (new project)
-* `git pull git://github.com/ept/neo4j-scala-template.git` (merge into existing project)
+With that dependency manually resolved, you should now be able to do a full build of
+`neo4j-resources`:
 
-Once that is done, open a shell, `cd` to the directory you just checked out, and run
-`mvn package` to do a full build. If you're not familiar with Maven -- the first time you
-build a project, it downloads what seems like the entire universe to a local repository
-in your home directory (all the dependencies of this project and the plugins it needs
-to build and run it). It gets much better after that first time.
+    $ git clone git://github.com/ept/neo4j-resources.git
+    $ cd neo4j-resources
+    $ mvn clean install
 
-Out of the box, this template is set up to support the following goals:
+To use this library in your projects, add the following to the `dependencies` section of your
+`pom.xml`:
 
-* `mvn package` -- Compile, test and bundle into a `war` file for deployment to
-  a standard Java web container (e.g. Tomcat).
-* `mvn test` -- Just compile and test.
-* `mvn jetty:run` -- Compile and run the app in an embedded Jetty server
-  on `http://localhost:8080/`.
-* `mvn clean` -- Remove build files
+    <dependency>
+      <groupId>com.eptcomputing</groupId>
+      <artifactId>neo4j-resources</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+
+If you don't use Maven, take `target/neo4j-resources-1.0-SNAPSHOT.jar` and all of its dependencies,
+and add them to your classpath.
 
 To use the project in Eclipse, you must have the Eclipse Scala plugin installed.
 You should also do a full Maven build before using Eclipse, to ensure you have
-all the dependencies.
-Then you should be able to do "File -> Import -> General -> Existing Projects into
-Workspace" and be ready to go. Note that at the time of writing, the Eclipse Scala
+all the dependencies downloaded. Then you should be able to do
+"File -> Import -> General -> Existing Projects into Workspace"
+and be ready to go. Note that at the time of writing, the Eclipse Scala
 plugin appears to have a bug which causes it not to write any class files to the
 target directory.
 
@@ -67,8 +61,8 @@ Troubleshooting
 ---------------
 
 If you're using a Java 6 JDK, you may get an error like "JAXB 2.0 API is being
-loaded from the bootstrap classloader, but this RI needs 2.1 API" when executing
-`mvn jetty:run`. You can fix this by setting the following environment variable:
+loaded from the bootstrap classloader, but this RI needs 2.1 API" when building
+this project. You can fix this by setting the following environment variable:
 
     export MAVEN_OPTS="-Djava.endorsed.dirs=$HOME/.m2/repository/javax/xml/bind/jaxb-api/2.1"
 
@@ -76,43 +70,14 @@ Depending on your operating system you may need to to adjust the path above to p
 to your Maven repository.
 
 
-Using this template
--------------------
+Using this library
+------------------
 
-This project includes an example resource called `neo_resource`, which you can use
-as basis to get started. Just run `mvn jetty:run` and use [cURL](http://curl.haxx.se/)
-to access the REST API:
-
-    $ curl -i -HAccept:application/json -HContent-type:application/json \
-        -d'{"name":"my first test node","_out":{"KNOWS":0}}' -XPOST \
-        http://localhost:8080/neo_resource
-
-    $ curl -i -HAccept:application/json http://localhost:8080/neo_resource/0
-
-(This example is based on the assumption that a node with ID 0 exists, which is Neo's
-reference node in the current implementation -- you shouldn't rely on the
-reference node having ID 0 though.)
-
-Moving forward, you will probably want to search the files for occurrences of
-`example` and replace them with something more appropriate.
-
-`src/main/webapp/WEB-INF/neo4j.properties` contains the settings for Neo4j (location of
-the database files, whether to enable the remote shell, etc.). You can provide different
-settings for different environments; `development`, `test` and `production` are provided
-as example. By default, `mvn test` runs in the `test` environment, and the web application
-runs in the `development` environment. On your production server, set the system property
-`neo4j.env=production` in your web container to activate the production environment.
-
-
-Useful links
-------------
-
-The main references you'll need for development:
-
-* [Scala standard library reference](http://www.scala-lang.org/docu/files/api/index.html)
-* [Jersey Javadoc](https://jsr311.dev.java.net/nonav/releases/1.0/index.html)
-* [Neo4j Javadoc](http://api.neo4j.org/current/)
-* [Scalatest](http://www.artima.com/scalatest/doc-0.9.5/index.html)
+Setting everything up to build correctly can be a bit of a nightmare, which is why I have
+prepared a [Neo4j Scala template project](http://github.com/ept/neo4j-scala-template/tree/master)
+to make it easy. It contains the full barebones structure for a Scala web project based on this
+library, including examples of how to use it and how to test it. (You *do* test everything,
+right?)
 
 
 License
