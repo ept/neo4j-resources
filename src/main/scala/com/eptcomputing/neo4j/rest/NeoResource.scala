@@ -26,9 +26,10 @@ abstract class NeoResource extends RequiredParam {
 
   /**
    * Override this method to perform mapping from a Neo4j node to a JSON object
-   * for output. Should return the desired JSON serialisation.
+   * for output. Should return the desired JSON serialisation, or an object which
+   * Jersey is able to serialise to JSON automatically.
    */
-  def read(neo: NeoService, node: Node): JSONObject
+  def read(neo: NeoService, node: Node): Any
 
   /**
    * Override this method to perform the overwriting of a Neo4j node with new data.
@@ -38,9 +39,9 @@ abstract class NeoResource extends RequiredParam {
   /**
    * Override this method to perform the deletion of a Neo4j node. Should return
    * a JSON serialisation of the node in its most recent version before it was
-   * deleted.
+   * deleted (or an object which Jersey is able to serialise to JSON automatically).
    */
-  def delete(neo: NeoService, node: Node): JSONObject
+  def delete(neo: NeoService, node: Node): Any
 
   /**
    * <tt>POST /neo_resource</tt> with a JSON document as body creates a new entity
