@@ -81,7 +81,7 @@ object NeoJsonConverter {
     for (rel <- node.getRelationships) deleteRel += rel.getId
 
     // Process special properties
-    for (key <- specialProps) try {
+    for (key <- specialProps filter { key => json.has(key) }) try {
       key match {
         case "_id"  =>
           if (json.getLong(key) != node.getId)
