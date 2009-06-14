@@ -11,7 +11,7 @@ import org.codehaus.jettison.json.{JSONObject, JSONArray, JSONException}
  */
 object NeoJsonConverter extends IteratorConverters {
 
-  val log = Logger.getLogger(this.getClass.getName)
+  private val log = Logger.getLogger(this.getClass.getName)
 
   /**
    * Serialises a Neo4j node into a JSON object of the following form:
