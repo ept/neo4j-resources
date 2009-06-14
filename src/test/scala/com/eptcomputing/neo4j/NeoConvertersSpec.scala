@@ -57,7 +57,7 @@ class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
         val start = neo.createNode
         val middle = neo.createNode
         val end = neo.createNode
-        (((start --| "foo") --> middle) --| "bar") --> end
+        start --| "foo" --> middle --| "bar" --> end
         start.getSingleRelationship(DynamicRelationshipType.withName("foo"), Direction.OUTGOING).
           getOtherNode(start) should equal(middle)
         middle.getSingleRelationship(DynamicRelationshipType.withName("bar"), Direction.OUTGOING).
