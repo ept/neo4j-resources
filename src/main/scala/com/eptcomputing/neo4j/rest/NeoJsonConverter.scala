@@ -9,7 +9,7 @@ import org.codehaus.jettison.json.{JSONObject, JSONArray, JSONException}
 /**
  * Provides helpers for converting Neo4j nodes to/from JSON.
  */
-object NeoJsonConverter {
+object NeoJsonConverter extends IteratorConverters {
 
   val log = Logger.getLogger(this.getClass.getName)
 
@@ -170,13 +170,4 @@ object NeoJsonConverter {
                                                " relationship in JSON: " + e.getMessage)
     }
   }
-                                     
-
-  /** Implicitly convert a Java iterable to a Scala iterator. */
-  implicit def java2scala[T](iter: java.lang.Iterable[T]): scala.Iterator[T] =
-    new scala.collection.jcl.MutableIterator.Wrapper(iter.iterator)
-  
-  /** Implicitly convert a Java iterator to a Scala iterator. */
-  implicit def java2scala[T](iter: java.util.Iterator[T]): scala.Iterator[T] =
-    new scala.collection.jcl.MutableIterator.Wrapper(iter)
 }
