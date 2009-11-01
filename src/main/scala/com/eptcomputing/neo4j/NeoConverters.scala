@@ -45,13 +45,13 @@ trait NeoConverters {
 
   implicit def node2relationshipBuilder(node: Node) = new NodeRelationshipMethods(node)
 
-  implicit def stringToRelationshipType(relType: String) = DynamicRelationshipType.withName(relType)
+  implicit def string2RelationshipType(relType: String) = DynamicRelationshipType.withName(relType)
 
   class RichPropertyContainer(propertyContainer: PropertyContainer) {
     def apply(property: String) = propertyContainer.getProperty(property)
     def update(property: String, value: Any) : Unit = propertyContainer.setProperty(property, value)
   }
 
-  implicit def propertyContainerToRichPropertyContainer(propertyContainer: PropertyContainer) = new RichPropertyContainer(propertyContainer)
+  implicit def propertyContainer2RichPropertyContainer(propertyContainer: PropertyContainer) = new RichPropertyContainer(propertyContainer)
 
 }
