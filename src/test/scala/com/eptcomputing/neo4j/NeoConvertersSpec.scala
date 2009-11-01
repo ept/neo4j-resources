@@ -86,7 +86,7 @@ class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
       }
     }
 
-    it("should read a property in a node('property') notation") {
+    it("should read a property in a node in node('property') notation") {
       NeoServer.exec { neo =>
         val start = neo.createNode
         start.setProperty("foo", "bar")
@@ -94,7 +94,7 @@ class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
       }
     }
 
-    it("should create a property in a node('property')=value notation") {
+    it("should create a property in a node in node('property')=value notation") {
       NeoServer.exec { neo =>
         val start = neo.createNode
         start("foo") = "bar"
@@ -102,5 +102,24 @@ class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
       }
     }
 
+    it("should read a property in a relationship in rel('property') notation") {
+      NeoServer.exec { neo =>
+        val start = neo.createNode
+        val end = neo.createNode
+        val rel = start.createRelationshipTo(end, DynamicRelationshipType.withName("foo"))
+        rel.setProperty("foo", "bar")
+        rel("foo") should equal("bar")
+      }
+    }
+
+    it("should create a property in a relationship in rel('property')=value notation") {
+      NeoServer.exec { neo =>
+        val start = neo.createNode
+        val end = neo.createNode
+        val rel = start.createRelationshipTo(end, DynamicRelationshipType.withName("foo"))
+        rel("foo") = "bar"
+        rel.getProperty("foo") should equal("bar")
+      }
+    }
   }
 }

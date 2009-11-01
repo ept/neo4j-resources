@@ -47,11 +47,11 @@ trait NeoConverters {
 
   implicit def stringToRelationshipType(relType: String) = DynamicRelationshipType.withName(relType)
 
-  class RichNode(node: Node) {
-    def apply(property: String) = node.getProperty(property)
-    def update(property: String, value: Any) : Unit = node.setProperty(property, value)
+  class RichPropertyContainer(propertyContainer: PropertyContainer) {
+    def apply(property: String) = propertyContainer.getProperty(property)
+    def update(property: String, value: Any) : Unit = propertyContainer.setProperty(property, value)
   }
 
-  implicit def nodeToRichNode(node: Node) = new RichNode(node)
+  implicit def propertyContainerToRichPropertyContainer(propertyContainer: PropertyContainer) = new RichPropertyContainer(propertyContainer)
 
 }
