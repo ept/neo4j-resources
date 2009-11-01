@@ -19,13 +19,10 @@ import org.neo4j.api.core._
 trait NeoConverters {
 
   class NodeRelationshipMethods(node: Node) {
-    // Create outgoing relationship
-    def --|(relType: String) = new OutgoingRelationshipBuilder(node, DynamicRelationshipType.withName(relType))
 
-    def --|(relType: RelationshipType) = new OutgoingRelationshipBuilder(node, relType)
+    def -->(relType: RelationshipType) = new OutgoingRelationshipBuilder(node, relType)
 
     // Create incoming relationship
-    def <--(relType: String) = new IncomingRelationshipBuilder(node, DynamicRelationshipType.withName(relType))
 
     def <--(relType: RelationshipType) = new IncomingRelationshipBuilder(node, relType)
   }
@@ -40,11 +37,21 @@ trait NeoConverters {
 
   // Half-way through building an incoming relationship
   class IncomingRelationshipBuilder(toNode: Node, relType: RelationshipType) {
-    def |--(fromNode: Node) = {
+    def <--(fromNode: Node) = {
       fromNode.createRelationshipTo(toNode, relType)
       new NodeRelationshipMethods(fromNode)
     }
   }
 
   implicit def node2relationshipBuilder(node: Node) = new NodeRelationshipMethods(node)
+
+  implicit def stringToRelationshipType(relType: String) = DynamicRelationshipType.withName(relType)
+
+  class RichNode(node: Node) {
+    def apply(property: String) = node.getProperty(property)
+    def update(property: String, value: Any) : Unit = node.setProperty(property, value)
+  }
+
+  implicit def nodeToRichNode(node: Node) = new RichNode(node)
+
 }

@@ -10,43 +10,43 @@ import org.neo4j.api.core._
 @RunWith(classOf[JUnit4Runner])
 class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
   describe("NeoConverters") {
-    it("should create a new relationship in --| relType --> notation") {
+    it("should create a new relationship in --> relType --> notation") {
       NeoServer.exec { neo =>
         val start = neo.createNode
         val end = neo.createNode
         val relType = DynamicRelationshipType.withName("foo")
-        start --| relType --> end
+        start --> relType --> end
         start.getSingleRelationship(relType, Direction.OUTGOING).
           getOtherNode(start) should equal(end)
       }
     }
 
-    it("should create a new relationship in --| \"relName\" --> notation") {
+    it("should create a new relationship in --> \"relName\" --> notation") {
       NeoServer.exec { neo =>
         val start = neo.createNode
         val end = neo.createNode
-        start --| "foo" --> end
+        start --> "foo" --> end
         start.getSingleRelationship(DynamicRelationshipType.withName("foo"), Direction.OUTGOING).
           getOtherNode(start) should equal(end)
       }
     }
 
-    it("should create a new relationship in <-- relType |-- notation") {
+    it("should create a new relationship in <-- relType <-- notation") {
       NeoServer.exec { neo =>
         val start = neo.createNode
         val end = neo.createNode
         val relType = DynamicRelationshipType.withName("foo")
-        end <-- relType |-- start
+        end <-- relType <-- start
         start.getSingleRelationship(relType, Direction.OUTGOING).
           getOtherNode(start) should equal(end)
       }
     }
 
-    it("should create a new relationship in <-- \"relName\" |-- notation") {
+    it("should create a new relationship in <-- \"relName\" <-- notation") {
       NeoServer.exec { neo =>
         val start = neo.createNode
         val end = neo.createNode
-        end <-- "foo" |-- start
+        end <-- "foo" <-- start
         start.getSingleRelationship(DynamicRelationshipType.withName("foo"), Direction.OUTGOING).
           getOtherNode(start) should equal(end)
       }
@@ -57,7 +57,7 @@ class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
         val start = neo.createNode
         val middle = neo.createNode
         val end = neo.createNode
-        start --| "foo" --> middle --| "bar" --> end
+        start --> "foo" --> middle --> "bar" --> end
         start.getSingleRelationship(DynamicRelationshipType.withName("foo"), Direction.OUTGOING).
           getOtherNode(start) should equal(middle)
         middle.getSingleRelationship(DynamicRelationshipType.withName("bar"), Direction.OUTGOING).
@@ -70,7 +70,7 @@ class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
         val left = neo.createNode
         val middle = neo.createNode
         val right = neo.createNode
-        left --| "foo" --> middle <-- "bar" |-- right
+        left --> "foo" --> middle <-- "bar" <-- right
         left.getSingleRelationship(DynamicRelationshipType.withName("foo"), Direction.OUTGOING).
           getOtherNode(left) should equal(middle)
         right.getSingleRelationship(DynamicRelationshipType.withName("bar"), Direction.OUTGOING).
@@ -81,9 +81,26 @@ class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
     it("should ignore a relationshipBuilder with no end node") {
       NeoServer.exec { neo =>
         val start = neo.createNode
-        start --| "foo"
+        start --> "foo"
         start.getRelationships.iterator.hasNext should equal(false)
       }
     }
+
+    it("should read a property in a node('property') notation") {
+      NeoServer.exec { neo =>
+        val start = neo.createNode
+        start.setProperty("foo", "bar")
+        start("foo") should equal("bar")
+      }
+    }
+
+    it("should create a property in a node('property')=value notation") {
+      NeoServer.exec { neo =>
+        val start = neo.createNode
+        start("foo") = "bar"
+        start.getProperty("foo") should equal("bar")
+      }
+    }
+
   }
 }
