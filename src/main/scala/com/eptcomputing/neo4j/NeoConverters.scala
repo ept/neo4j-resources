@@ -48,10 +48,19 @@ trait NeoConverters {
   implicit def string2RelationshipType(relType: String) = DynamicRelationshipType.withName(relType)
 
   class RichPropertyContainer(propertyContainer: PropertyContainer) {
-    def apply(property: String) = propertyContainer.getProperty(property)
+    def apply(property: String) : Option[Any] = if(propertyContainer.hasProperty(property)) Some(propertyContainer.getProperty(property)) else None
     def update(property: String, value: Any) : Unit = propertyContainer.setProperty(property, value)
   }
 
   implicit def propertyContainer2RichPropertyContainer(propertyContainer: PropertyContainer) = new RichPropertyContainer(propertyContainer)
 
+  implicit def fn2StopEvaluator(e : TraversalPosition => Boolean) = 
+    new StopEvaluator() {
+      def isStopNode(traversalPosition : TraversalPosition) = e(traversalPosition)
+    }
+
+  implicit def fn2ReturnableEvaluator(e : TraversalPosition => Boolean) = 
+    new ReturnableEvaluator () {
+      def isReturnableNode(traversalPosition : TraversalPosition) = e(traversalPosition)
+    }
 }

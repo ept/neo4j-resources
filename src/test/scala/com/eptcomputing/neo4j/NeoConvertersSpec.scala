@@ -90,7 +90,8 @@ class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
       NeoServer.exec { neo =>
         val start = neo.createNode
         start.setProperty("foo", "bar")
-        start("foo") should equal("bar")
+        start("foo") should equal(Some("bar"))
+        start("bar") should equal(None)
       }
     }
 
@@ -108,7 +109,8 @@ class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
         val end = neo.createNode
         val rel = start.createRelationshipTo(end, DynamicRelationshipType.withName("foo"))
         rel.setProperty("foo", "bar")
-        rel("foo") should equal("bar")
+        rel("foo") should equal(Some("bar"))
+        rel("bar") should equal(None)
       }
     }
 
@@ -119,6 +121,28 @@ class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
         val rel = start.createRelationshipTo(end, DynamicRelationshipType.withName("foo"))
         rel("foo") = "bar"
         rel.getProperty("foo") should equal("bar")
+      }
+    }
+
+    it("should allow writing stop evaluators in a functional style") {
+      NeoServer.exec { neo =>
+        val start = neo.createNode
+        val end = neo.createNode
+        val rel = start.createRelationshipTo(end, DynamicRelationshipType.withName("foo"))
+        val traverser = start.traverse(Traverser.Order.BREADTH_FIRST, (tp : TraversalPosition) => false, ReturnableEvaluator.ALL_BUT_START_NODE, DynamicRelationshipType.withName("foo"), Direction.OUTGOING)
+        traverser.iterator.hasNext should equal(true)
+        traverser.iterator.next should equal(end)
+      }
+    }
+
+    it("should allow writing returnable evaluators in a functional style") {
+      NeoServer.exec { neo =>
+        val start = neo.createNode
+        val end = neo.createNode
+        val rel = start.createRelationshipTo(end, DynamicRelationshipType.withName("foo"))
+        val traverser = start.traverse(Traverser.Order.BREADTH_FIRST, StopEvaluator.END_OF_GRAPH, (tp : TraversalPosition) => tp.notStartNode(), DynamicRelationshipType.withName("foo"), Direction.OUTGOING)
+        traverser.iterator.hasNext should equal(true)
+        traverser.iterator.next should equal(end)
       }
     }
   }
