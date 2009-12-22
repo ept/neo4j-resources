@@ -8,7 +8,9 @@
   <artifactId>neo4j-resources</artifactId>
   <name>neo4j-resources</name>
   <version>1.0-SNAPSHOT</version>
-
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
   <dependencies>
     <!-- Scala standard library -->
     <dependency>
