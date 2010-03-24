@@ -3,13 +3,13 @@ package com.eptcomputing.neo4j.rest
 import scala.collection.mutable.HashSet
 import java.util.logging.Logger
 
-import org.neo4j.api.core._
+import org.neo4j.graphdb._
 import org.codehaus.jettison.json.{JSONObject, JSONArray, JSONException}
 
 /**
  * Provides helpers for converting Neo4j nodes to/from JSON.
  */
-object NeoJsonConverter extends IteratorConverters {
+object Neo4jJsonConverter extends IteratorConverters {
 
   private val log = Logger.getLogger(this.getClass.getName)
 
@@ -71,7 +71,7 @@ object NeoJsonConverter extends IteratorConverters {
    * of that node are updated to match the JSON description; if null, a new node is created.
    * In either case, the up-to-date node is returned.
    */
-  def jsonToNeo(json: JSONObject, neo: NeoService, existingNode: Node): Node = {
+  def jsonToNeo(json: JSONObject, neo: GraphDatabaseService, existingNode: Node): Node = {
     val specialProps = Array("_id", "_url", "_in", "_out")
     val node = if (existingNode == null) neo.createNode else existingNode
     jsonPropertiesToNeo(json, node, specialProps)
@@ -129,7 +129,7 @@ object NeoJsonConverter extends IteratorConverters {
   }
 
   /** Tries to convert a single JSON object, representing a relationship, into Neo. */
-  private def jsonRelationshipToNeo(obj: Object, neo: NeoService, node: Node, name: String,
+  private def jsonRelationshipToNeo(obj: Object, neo: GraphDatabaseService, node: Node, name: String,
                                     direction: Direction, unprocessedRels: HashSet[Long]) {
     val relType = DynamicRelationshipType.withName(name)
 

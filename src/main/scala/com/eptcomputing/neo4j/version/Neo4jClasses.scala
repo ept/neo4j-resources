@@ -1,7 +1,7 @@
 package com.eptcomputing.neo4j.version
 
 import java.io.Serializable
-import org.neo4j.api.core._
+import org.neo4j.graphdb._
 
 // THIS IS WORK IN PROGRESS
 //
@@ -13,7 +13,7 @@ import org.neo4j.api.core._
 //
 // At the moment, these classes simply delegate to an underlying 'real' Neo4j object.
 
-private class VersionedNeo(delegate: NeoService) extends NeoService {
+private class VersionedNeo(delegate: GraphDatabaseService) extends GraphDatabaseService {
   def beginTx: Transaction = delegate.beginTx
 
   def createNode: Node = delegate.createNode

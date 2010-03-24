@@ -5,13 +5,13 @@ import org.scalatest.matchers.ShouldMatchers
 import org.junit.runner.RunWith
 import com.jteigen.scalatest.JUnit4Runner
 
-import org.neo4j.api.core._
+import org.neo4j.graphdb._
 
 @RunWith(classOf[JUnit4Runner])
 class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
   describe("NeoConverters") {
     it("should create a new relationship in --> relType --> notation") {
-      NeoServer.exec { neo =>
+      Neo4jServer.exec { neo =>
         val start = neo.createNode
         val end = neo.createNode
         val relType = DynamicRelationshipType.withName("foo")
@@ -22,7 +22,7 @@ class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
     }
 
     it("should create a new relationship in --> \"relName\" --> notation") {
-      NeoServer.exec { neo =>
+      Neo4jServer.exec { neo =>
         val start = neo.createNode
         val end = neo.createNode
         start --> "foo" --> end
@@ -32,7 +32,7 @@ class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
     }
 
     it("should create a new relationship in <-- relType <-- notation") {
-      NeoServer.exec { neo =>
+      Neo4jServer.exec { neo =>
         val start = neo.createNode
         val end = neo.createNode
         val relType = DynamicRelationshipType.withName("foo")
@@ -43,7 +43,7 @@ class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
     }
 
     it("should create a new relationship in <-- \"relName\" <-- notation") {
-      NeoServer.exec { neo =>
+      Neo4jServer.exec { neo =>
         val start = neo.createNode
         val end = neo.createNode
         end <-- "foo" <-- start
@@ -53,7 +53,7 @@ class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
     }
 
     it("should allow relationships of the same direction to be chained") {
-      NeoServer.exec { neo =>
+      Neo4jServer.exec { neo =>
         val start = neo.createNode
         val middle = neo.createNode
         val end = neo.createNode
@@ -66,7 +66,7 @@ class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
     }
 
     it("should allow relationships of different directions to be chained") {
-      NeoServer.exec { neo =>
+      Neo4jServer.exec { neo =>
         val left = neo.createNode
         val middle = neo.createNode
         val right = neo.createNode
@@ -79,7 +79,7 @@ class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
     }
 
     it("should ignore a relationshipBuilder with no end node") {
-      NeoServer.exec { neo =>
+      Neo4jServer.exec { neo =>
         val start = neo.createNode
         start --> "foo"
         start.getRelationships.iterator.hasNext should equal(false)
@@ -87,7 +87,7 @@ class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
     }
 
     it("should read a property in a node in node('property') notation") {
-      NeoServer.exec { neo =>
+      Neo4jServer.exec { neo =>
         val start = neo.createNode
         start.setProperty("foo", "bar")
         start("foo") should equal(Some("bar"))
@@ -96,7 +96,7 @@ class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
     }
 
     it("should create a property in a node in node('property')=value notation") {
-      NeoServer.exec { neo =>
+      Neo4jServer.exec { neo =>
         val start = neo.createNode
         start("foo") = "bar"
         start.getProperty("foo") should equal("bar")
@@ -104,7 +104,7 @@ class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
     }
 
     it("should read a property in a relationship in rel('property') notation") {
-      NeoServer.exec { neo =>
+      Neo4jServer.exec { neo =>
         val start = neo.createNode
         val end = neo.createNode
         val rel = start.createRelationshipTo(end, DynamicRelationshipType.withName("foo"))
@@ -115,7 +115,7 @@ class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
     }
 
     it("should create a property in a relationship in rel('property')=value notation") {
-      NeoServer.exec { neo =>
+      Neo4jServer.exec { neo =>
         val start = neo.createNode
         val end = neo.createNode
         val rel = start.createRelationshipTo(end, DynamicRelationshipType.withName("foo"))
@@ -125,7 +125,7 @@ class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
     }
 
     it("should allow writing stop evaluators in a functional style") {
-      NeoServer.exec { neo =>
+      Neo4jServer.exec { neo =>
         val start = neo.createNode
         val end = neo.createNode
         val rel = start.createRelationshipTo(end, DynamicRelationshipType.withName("foo"))
@@ -136,7 +136,7 @@ class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
     }
 
     it("should allow writing returnable evaluators in a functional style") {
-      NeoServer.exec { neo =>
+      Neo4jServer.exec { neo =>
         val start = neo.createNode
         val end = neo.createNode
         val rel = start.createRelationshipTo(end, DynamicRelationshipType.withName("foo"))

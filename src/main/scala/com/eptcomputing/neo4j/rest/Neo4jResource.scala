@@ -5,10 +5,10 @@ import javax.ws.rs._
 import javax.ws.rs.core._
 
 import org.codehaus.jettison.json.JSONObject
-import org.neo4j.api.core.{NeoService, Node}
+import org.neo4j.graphdb.{GraphDatabaseService, Node}
 
-import com.eptcomputing.neo4j.NeoServer
-import NeoJsonConverter._
+import com.eptcomputing.neo4j.Neo4jServer
+import Neo4jJsonConverter._
 
 /**
  * A template for a CRUD (Create/Read/Update/Delete) RESTful JSON resource. You can
@@ -22,26 +22,26 @@ abstract class NeoResource extends RequiredParam {
    * JSON object. Should return the newly created node. Is called within a Neo4j
    * transaction.
    */
-  def create(neo: NeoService, json: JSONObject): Node
+  def create(neo: GraphDatabaseService, json: JSONObject): Node
 
   /**
    * Override this method to perform mapping from a Neo4j node to a JSON object
    * for output. Should return the desired JSON serialisation, or an object which
    * Jersey is able to serialise to JSON automatically.
    */
-  def read(neo: NeoService, node: Node): Any
+  def read(neo: GraphDatabaseService, node: Node): Any
 
   /**
    * Override this method to perform the overwriting of a Neo4j node with new data.
    */
-  def update(neo: NeoService, existing: Node, newValue: JSONObject)
+  def update(neo: GraphDatabaseService, existing: Node, newValue: JSONObject)
 
   /**
    * Override this method to perform the deletion of a Neo4j node. Should return
    * a JSON serialisation of the node in its most recent version before it was
    * deleted (or an object which Jersey is able to serialise to JSON automatically).
    */
-  def delete(neo: NeoService, node: Node): Any
+  def delete(neo: GraphDatabaseService, node: Node): Any
 
   /**
    * <tt>POST /neo_resource</tt> with a JSON document as body creates a new entity
@@ -52,7 +52,7 @@ abstract class NeoResource extends RequiredParam {
   @Consumes(Array(MediaType.APPLICATION_JSON))
   @Produces(Array(MediaType.APPLICATION_JSON))
   def createJSON(json: JSONObject) = {
-    NeoServer.exec { neo =>
+    Neo4jServer.exec { neo =>
       val node = create(neo, json)
       val uri = UriBuilder.fromResource(this.getClass).path("{id}").build(new java.lang.Long(node.getId))
       Response.created(uri).entity(read(neo, node)).build
@@ -67,7 +67,7 @@ abstract class NeoResource extends RequiredParam {
   @Produces(Array(MediaType.APPLICATION_JSON))
   def readJSON(@PathParam("id") node: NeoNodeParam) = {
     requiredParam("id", node)
-    NeoServer.exec { neo => read(neo, node.getNode(neo)) }
+    Neo4jServer.exec { neo => read(neo, node.getNode(neo)) }
   }
 
   /**
@@ -80,7 +80,7 @@ abstract class NeoResource extends RequiredParam {
   @Produces(Array(MediaType.APPLICATION_JSON))
   def updateJSON(@PathParam("id") node: NeoNodeParam, json: JSONObject) = {
     requiredParam("id", node)
-    NeoServer.exec { neo =>
+    Neo4jServer.exec { neo =>
       val neoNode = node.getNode(neo)
       update(neo, neoNode, json)
       read(neo, neoNode)
@@ -95,27 +95,27 @@ abstract class NeoResource extends RequiredParam {
   @Produces(Array(MediaType.APPLICATION_JSON))
   def deleteJSON(@PathParam("id") node: NeoNodeParam) = {
     requiredParam("id", node)
-    NeoServer.exec { neo => delete(neo, node.getNode(neo)) }
+    Neo4jServer.exec { neo => delete(neo, node.getNode(neo)) }
   }
 }
 
 
 /**
  * Simple default implementation of a CRUD resource which maps to a single Neo4j node.
- * See <tt>NeoJsonConverter</tt> for the format used.
+ * See <tt>Neo4jJsonConverter</tt> for the format used.
  */
 class SimpleNeoResource extends NeoResource with IteratorConverters {
 
-  def create(neo: NeoService, json: JSONObject) =
+  def create(neo: GraphDatabaseService, json: JSONObject) =
     jsonToNeo(json, neo, null)
 
-  def read(neo: NeoService, node: Node) =
+  def read(neo: GraphDatabaseService, node: Node) =
     neoToJson(node)
 
-  def update(neo: NeoService, existing: Node, newValue: JSONObject) =
+  def update(neo: GraphDatabaseService, existing: Node, newValue: JSONObject) =
     jsonToNeo(newValue, neo, existing)
 
-  def delete(neo: NeoService, node: Node) = {
+  def delete(neo: GraphDatabaseService, node: Node) = {
     val json = neoToJson(node)
     node.getRelationships.foreach{_.delete}
     node.delete

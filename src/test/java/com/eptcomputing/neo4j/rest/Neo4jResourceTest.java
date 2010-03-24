@@ -1,24 +1,28 @@
 package com.eptcomputing.neo4j.rest;
 
+import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+import org.junit.Test;
+
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.test.framework.JerseyTest;
-
-import org.junit.*;
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
-
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONObject;
 
 /**
  * Sadly, we cannot yet write Jersey client tests in Scala because of a bug in the compiler:
  * http://lampsvn.epfl.ch/trac/scala/ticket/1539
  */
-public class NeoResourceTest extends JerseyTest {
+public class Neo4jResourceTest extends JerseyTest {
 
-    public NeoResourceTest() throws Exception {
+    public Neo4jResourceTest() throws Exception {
         super("com.eptcomputing.neo4j.rest.test");
     }
 

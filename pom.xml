@@ -72,20 +72,20 @@
     <!-- Neo4j graph database -->
     <dependency>
       <groupId>org.neo4j</groupId>
-      <artifactId>neo</artifactId>
-      <version>1.0-b10</version>
+      <artifactId>neo4j-kernel</artifactId>
+      <version>1.0</version>
     </dependency>
 
     <dependency>
       <groupId>org.neo4j</groupId>
-      <artifactId>shell</artifactId>
-      <version>1.0-b10</version>
+      <artifactId>neo4j-shell</artifactId>
+      <version>1.0</version>
     </dependency>
 
     <dependency>
       <groupId>org.neo4j</groupId>
-      <artifactId>neo-utils</artifactId>
-      <version>1.0-b10-SNAPSHOT</version>
+      <artifactId>neo4j-utils</artifactId>
+      <version>1.0</version>
     </dependency>
 
     <!-- General utilities -->

@@ -3,7 +3,7 @@ package com.eptcomputing.neo4j.rest
 import javax.ws.rs._
 import javax.ws.rs.core._
 
-import org.neo4j.api.core.{NeoService, Node, NotFoundException}
+import org.neo4j.graphdb.{GraphDatabaseService, Node, NotFoundException}
 
 /**
  * Encapsulates the value of a parameter passed to the API (e.g. type of a @FormParam or
@@ -40,7 +40,7 @@ class NeoNodeParam(param: String) extends ParamType[Int](param) {
    * Tries to find a node in a Neo server instance, raises HTTP 404 ("not found") if the node does
    * not exist.
    */
-  def getNode(neo: NeoService): Node = {
+  def getNode(neo: GraphDatabaseService): Node = {
     try {
       neo.getNodeById(value)
     } catch {

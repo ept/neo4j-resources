@@ -1,6 +1,6 @@
 package com.eptcomputing.neo4j
 
-import org.neo4j.api.core._
+import org.neo4j.graphdb._
 
 /**
  * Extend your class with this trait to get really neat new notation for creating

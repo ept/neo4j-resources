@@ -5,15 +5,16 @@ import java.util.{TreeMap, Properties}
 import java.util.logging.Logger
 import javax.servlet.ServletContext
 import org.apache.commons.io.FileUtils
-import org.neo4j.api.core.{EmbeddedNeo, NeoService}
+import org.neo4j.graphdb.GraphDatabaseService
+import org.neo4j.kernel.EmbeddedGraphDatabase
 
 /**
  * Wrapper around a singleton instance of Neo4j embedded server.
  */
-object NeoServer {
+object Neo4jServer {
 
   private val log = Logger.getLogger(this.getClass.getName)
-  private var neo: NeoService = null
+  private var neo: GraphDatabaseService = null
 
   /**
    * Initialize Neo4j with configuration stored in a properties file specified via a
@@ -57,7 +58,7 @@ object NeoServer {
       case e: IOException => log.warning("Cannot read Neo4j configuration: " + e)
     }
     val environment = System.getProperty("neo4j.env", "development")
-    NeoServer.startup(neoConfig, environment)
+    Neo4jServer.startup(neoConfig, environment)
   }
 
   /**
@@ -82,7 +83,7 @@ object NeoServer {
         try { FileUtils.deleteDirectory(new File(neoPath)) } catch { case _: IOException => }
       }
 
-      neo = new EmbeddedNeo(neoPath)
+      neo = new EmbeddedGraphDatabase(neoPath)
 
       // Setup shell if required
       if (isTrue(prop("shell.enabled", "false"))) {
@@ -100,7 +101,7 @@ object NeoServer {
       // Register a shutdown hook to ensure Neo4j is cleanly shut down before the JVM exits
       Runtime.getRuntime.addShutdownHook(new Thread() {
         override def run() {
-          NeoServer.shutdown
+          Neo4jServer.shutdown
         }
       })
     }
@@ -121,7 +122,7 @@ object NeoServer {
    * Execute instructions within a Neo4j transaction; rollback if exception is raised and
    * commit otherwise; and return the return value from the operation.
    */
-  def exec[T<:Any](operation: NeoService => T): T = {
+  def exec[T<:Any](operation: GraphDatabaseService => T): T = {
     val tx = synchronized {
       if (neo == null) startup
       neo.beginTx

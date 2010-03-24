@@ -1,7 +1,8 @@
+
 package com.eptcomputing.neo4j.version;
 
-import org.neo4j.api.core.NotFoundException;
-import org.neo4j.api.core.PropertyContainer;
+import org.neo4j.graphdb.NotFoundException;
+import org.neo4j.graphdb.PropertyContainer;
 
 abstract class PrimitiveBase implements PropertyContainer {
 
