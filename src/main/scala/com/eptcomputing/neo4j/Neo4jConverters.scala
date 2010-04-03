@@ -16,7 +16,7 @@ import org.neo4j.graphdb._
  *
  * Feel free to use this example to tell all your friends how awesome scala is :)
  */
-trait NeoConverters {
+trait Neo4jConverters {
 
   class NodeRelationshipMethods(node: Node) {
 

@@ -15,7 +15,7 @@ import Neo4jJsonConverter._
  * override each of the operations with a concise method to perform the desired task.
  * See <tt>SimpleNeoResource</tt> for a default implementation.
  */
-abstract class NeoResource extends RequiredParam {
+abstract class Neo4jResource extends RequiredParam {
 
   /**
    * Override this method to perform the creation of a Neo4j node based on a given
@@ -104,7 +104,7 @@ abstract class NeoResource extends RequiredParam {
  * Simple default implementation of a CRUD resource which maps to a single Neo4j node.
  * See <tt>Neo4jJsonConverter</tt> for the format used.
  */
-class SimpleNeoResource extends NeoResource with IteratorConverters {
+class SimpleNeo4jResource extends Neo4jResource with IteratorConverters {
 
   def create(neo: GraphDatabaseService, json: JSONObject) =
     jsonToNeo(json, neo, null)

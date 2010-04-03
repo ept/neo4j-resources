@@ -8,7 +8,7 @@ import com.jteigen.scalatest.JUnit4Runner
 import org.neo4j.graphdb._
 
 @RunWith(classOf[JUnit4Runner])
-class NeoConvertersSpec extends Spec with ShouldMatchers with NeoConverters {
+class NeoConvertersSpec extends Spec with ShouldMatchers with Neo4jConverters {
   describe("NeoConverters") {
     it("should create a new relationship in --> relType --> notation") {
       Neo4jServer.exec { neo =>

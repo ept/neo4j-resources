@@ -1,7 +1,7 @@
 package com.eptcomputing.neo4j.rest.test
 
 import javax.ws.rs.Path
-import com.eptcomputing.neo4j.rest.SimpleNeoResource
+import com.eptcomputing.neo4j.rest.SimpleNeo4jResource
 
 /**
  * Example of a RESTful CRUD (create/read/update/delete) resource which maps to a single
@@ -9,4 +9,4 @@ import com.eptcomputing.neo4j.rest.SimpleNeoResource
  * represented explicitly -- see <tt>Neo4jJsonConverter</tt>.
  */
 @Path("/neo_resource")
-class ExampleNeoResource extends SimpleNeoResource
+class ExampleNeo4jResource extends SimpleNeo4jResource
