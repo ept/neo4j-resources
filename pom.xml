@@ -16,7 +16,7 @@
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
-      <version>2.7.4.final</version>
+      <version>2.7.7</version>
     </dependency>
 
     <!-- Testing frameworks -->
@@ -112,7 +112,7 @@
       <plugin>
         <groupId>org.scala-tools</groupId>
         <artifactId>maven-scala-plugin</artifactId>
-        <version>2.10</version>
+        <version>2.13</version>
         <executions>
           <execution>
             <id>scala-compile-first</id>
@@ -154,7 +154,7 @@
         <plugin>
           <groupId>org.scala-tools</groupId>
           <artifactId>maven-scala-plugin</artifactId>
-          <version>2.10</version>
+          <version>2.13</version>
         </plugin>
 
         <plugin>
