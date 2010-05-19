@@ -1,5 +1,6 @@
 package com.eptcomputing.neo4j.rest
 
+import scala.collection.JavaConversions._
 import java.util.logging.Logger
 import javax.ws.rs._
 import javax.ws.rs.core._
@@ -104,7 +105,7 @@ abstract class Neo4jResource extends RequiredParam {
  * Simple default implementation of a CRUD resource which maps to a single Neo4j node.
  * See <tt>Neo4jJsonConverter</tt> for the format used.
  */
-class SimpleNeo4jResource extends Neo4jResource with IteratorConverters {
+class SimpleNeo4jResource extends Neo4jResource {
 
   def create(neo: GraphDatabaseService, json: JSONObject) =
     jsonToNeo(json, neo, null)

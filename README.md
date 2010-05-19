@@ -8,7 +8,7 @@ to be used in other Scala projects, although you may be able to get it to work w
 other JVM-based langauges too. Projects using this library can build amazing databases
 with a minimum of boilerplate and unnecessary code.
 
-Please see the [Neo4j Scala template](http://github.com/ept/neo4j-scala-template/tree/master)
+Please see the [Neo4j Scala template](http://github.com/ept/neo4j-scala-template)
 as a starting point for your application based on the Neo4j resources library.
 
 
@@ -22,15 +22,7 @@ You need a Java 5 (or newer) environment and Maven 2.0.9 (or newer) installed:
     Java version: 1.6.0_03-p3
     OS name: "darwin" version: "9.7.0" arch: "i386" Family: "unix"
 
-Install the [JUnit4 Runner for ScalaTest](http://github.com/teigen/scalatest-junit4runner/tree/master)
-as follows:
-
-    $ git clone git://github.com/teigen/scalatest-junit4runner.git
-    $ cd scalatest-junit4runner
-    $ mvn clean install
-
-With that dependency manually resolved, you should now be able to do a full build of
-`neo4j-resources`:
+To do a full build of `neo4j-resources`, run the following:
 
     $ git clone git://github.com/ept/neo4j-resources.git
     $ cd neo4j-resources

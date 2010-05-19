@@ -2,15 +2,15 @@ package com.eptcomputing.neo4j.rest
 
 import org.scalatest.Spec
 import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
-import com.jteigen.scalatest.JUnit4Runner
 
 import org.codehaus.jettison.json.{JSONObject, JSONArray}
 import org.neo4j.graphdb._
 
 import com.eptcomputing.neo4j.Neo4jServer
 
-@RunWith(classOf[JUnit4Runner])
+@RunWith(classOf[JUnitRunner])
 class JsonConverterSpec extends Spec with ShouldMatchers {
 
   // Helper for converting JSON to Node
