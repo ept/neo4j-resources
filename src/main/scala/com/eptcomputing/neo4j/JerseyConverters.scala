@@ -13,6 +13,7 @@ import org.codehaus.jettison.json.JSONObject
  *   to pass an ugly type parameter. With these conversions, you can just use
  *   e.g. getResponse instead of get, and it defaults to a type of ClientResponse, or
  *   e.g. getJSON instead of get, and it defaults to a type of JSONObject.
+ * - If you want to get the body of a ClientResponse as a string, just call the body method.
  */
 trait JerseyConverters {
 
@@ -42,10 +43,22 @@ trait JerseyConverters {
     def putJSON (entity: java.lang.Object) = uniformInterface.put (classOf[JSONObject], entity)
   }
 
+  class ClientResponseMethods(clientResponse: ClientResponse) {
+    private var _body: Option[String] = None
+    def body = _body match {
+      case Some(b) => b
+      case None =>
+        _body = Some(clientResponse.getEntity(classOf[String]))
+        _body.get
+    }
+  }
 
   implicit def addContentTypeMethodToWebResource(resource: WebResource) =
     new WebResourceMethods(resource)
 
   implicit def addResponseMethodsToUniformInterface(uniformInterface: UniformInterface) =
     new UniformInterfaceMethods(uniformInterface)
+
+  implicit def addBodyMethodsToClientResponse(clientResponse: ClientResponse) =
+    new ClientResponseMethods(clientResponse)
 }
